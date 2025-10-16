@@ -1,0 +1,118 @@
+/* Footer - GCBA Nuevo diseño */
+.footer {
+  background: var(--gcba-blue);
+  padding: 2rem 1rem;
+  margin-top: auto;
+  border-top: 1px solid var(--border-light);
+}
+
+.footer-content {
+  max-width: 1152px; /* max-w-6xl */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.footer-logo {
+  flex-shrink: 0;
+}
+
+.footer-logo-img {
+  height: 120px;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footer-copyright {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(141, 226, 214, 0.2);
+  text-align: center;
+  max-width: 1152px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.footer-copyright p {
+  font-size: 0.75rem;
+  color: rgba(141, 226, 214, 0.8);
+  margin: 0;
+}
+
+.footer-claim {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 1rem;
+  color: white;
+  margin: 0;
+}
+
+.footer-subtitle {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: var(--gcba-cyan);
+  margin: 0;
+}
+
+.footer-right {
+  display: flex;
+  gap: 1.5rem;
+  color: var(--gcba-cyan);
+  font-size: 0.875rem;
+  align-items: center;
+  margin-left: auto;
+}
+
+.footer-link {
+  color: var(--gcba-cyan);
+  text-decoration: none;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.footer-link:hover {
+  color: var(--gcba-yellow);
+  text-decoration: underline;
+}
+
+.footer-link:focus-visible {
+  outline: 2px solid var(--gcba-yellow);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  
+  .footer-right {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+

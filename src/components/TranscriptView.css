@@ -1,0 +1,117 @@
+.transcript-view {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.transcript-header {
+  text-align: center;
+}
+
+.transcript-header h2 {
+  color: var(--gcba-blue);
+  margin-bottom: 1rem;
+}
+
+.audio-info {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.info-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #E0F7F5;
+  color: var(--gcba-blue);
+  border: 1px solid var(--gcba-cyan);
+  border-radius: 999px;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.transcript-content {
+  position: relative;
+}
+
+.transcript-label {
+  display: block;
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--gcba-blue);
+  margin-bottom: 1rem;
+}
+
+.transcript-text {
+  width: 100%;
+  min-height: 300px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--gcba-gray);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.transcript-text:focus-visible {
+  outline: 3px solid var(--gcba-blue);
+  outline-offset: 2px;
+}
+
+.transcript-stats {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+  font-family: var(--font-primary);
+  font-size: 0.875rem;
+  color: var(--gcba-gray);
+}
+
+.transcript-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.download-button {
+  font-size: 1.125rem;
+  padding: 1rem 2rem;
+}
+
+@media (max-width: 768px) {
+  .audio-info {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .transcript-actions {
+    flex-direction: column;
+  }
+  
+  .transcript-actions button {
+    width: 100%;
+  }
+  
+  .transcript-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-end;
+  }
+}
+
+

@@ -1,0 +1,143 @@
+.url-input-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.info-notice {
+  background: #FEF3C7;
+  border: 1px solid #FCD34D;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.info-notice p {
+  margin: 0.5rem 0;
+  color: var(--gcba-blue);
+  font-size: 0.875rem;
+}
+
+.info-notice strong {
+  color: var(--gcba-blue);
+}
+
+.url-subtitle {
+  text-align: center;
+  color: var(--gcba-gray);
+  margin-bottom: 2rem;
+}
+
+.url-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.url-input {
+  width: 100%;
+  padding: 1rem 3rem 1rem 1rem;
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  border: 2px solid var(--gcba-cyan);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background: white;
+  color: var(--gcba-blue);
+}
+
+.url-input:focus {
+  outline: none;
+  border-color: var(--gcba-blue);
+  box-shadow: 0 0 0 3px rgba(141, 226, 214, 0.3);
+}
+
+.url-input.valid {
+  border-color: #4CAF50;
+}
+
+.url-input.invalid {
+  border-color: #F44336;
+}
+
+.validation-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.validation-icon.valid {
+  color: #4CAF50;
+}
+
+.validation-icon.invalid {
+  color: #F44336;
+}
+
+.url-help {
+  font-size: 0.875rem;
+  color: var(--gcba-gray);
+  min-height: 1.5rem;
+  margin: 0;
+}
+
+.error-text {
+  color: #F44336;
+  font-weight: 500;
+}
+
+.platform-icons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  padding: 1.5rem;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+}
+
+.platform-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-primary);
+  font-weight: 500;
+  color: var(--gcba-blue);
+}
+
+.platform-badge span:first-child {
+  font-size: 2rem;
+}
+
+.submit-button {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@media (max-width: 768px) {
+  .platform-icons {
+    gap: 1rem;
+  }
+}
+
+

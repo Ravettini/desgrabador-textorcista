@@ -1,0 +1,108 @@
+/* Header - GCBA Nuevo diseño */
+.header {
+  background: var(--gcba-offwhite);
+  border-bottom: 1px solid var(--border-light);
+  height: 96px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  width: 100%;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1.5rem;
+}
+
+.logo-container {
+  flex-shrink: 0;
+  padding-left: 0.5rem;
+}
+
+.logo-ba {
+  height: 100px;
+  width: 100px;
+  object-fit: contain;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.header-title {
+  font-family: var(--font-primary);
+  font-weight: 700;
+  font-size: 1.25rem; /* text-xl */
+  color: var(--gcba-blue);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.header-subtitle {
+  font-family: var(--font-primary);
+  font-weight: 400;
+  font-size: 0.875rem; /* text-sm */
+  color: var(--gcba-gray);
+  margin: 0;
+}
+
+.header-nav {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-left: auto;
+}
+
+.nav-link {
+  font-family: var(--font-primary);
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--gcba-blue);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--gcba-blue);
+  text-decoration: underline;
+}
+
+.nav-link:focus-visible {
+  outline: 2px solid var(--gcba-blue);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: auto;
+    padding: 1rem 0;
+  }
+  
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .logo-ba {
+    height: 80px;
+    width: 80px;
+  }
+  
+  .header-title {
+    font-size: 1.125rem;
+  }
+  
+  .header-subtitle {
+    font-size: 0.75rem;
+  }
+}
+
+
