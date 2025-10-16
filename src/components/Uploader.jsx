@@ -162,10 +162,10 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
       formData.append('audio', audioBlob, fileName)
       console.log('📤 Sending to API:', { fileName, size: audioBlob.size })
 
-      // Usar URL de Colab si está configurada, sino usar Netlify
+      // Usar URL de Colab si está configurada, sino usar función local
       const API_URL = import.meta.env.VITE_COLAB_API_URL 
         ? `${import.meta.env.VITE_COLAB_API_URL}/api/transcribe`
-        : '/api/transcribe-replicate'
+        : '/api/transcribe'
       
       console.log('🔗 Using API URL:', API_URL)
       
