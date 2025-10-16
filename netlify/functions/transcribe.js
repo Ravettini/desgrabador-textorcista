@@ -121,9 +121,9 @@ exports.handler = async function(event) {
     let duration = null
     let size = null
 
-    // Por ahora, SOLO soportar archivos subidos (no URLs)
+    // Manejar URLs (temporalmente deshabilitado)
     if (contentType.includes('application/json')) {
-      // URLs deshabilitadas temporalmente para debugging
+      console.log('Solicitud con JSON (URL) - temporalmente deshabilitada')
       return {
         statusCode: 400,
         headers,
