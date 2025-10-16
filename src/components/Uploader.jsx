@@ -162,7 +162,7 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
       formData.append('audio', audioBlob, fileName)
       console.log('📤 Sending to API:', { fileName, size: audioBlob.size })
 
-      const response = await axios.post('/api/transcribe', formData, {
+      const response = await axios.post('/api/transcribe-simple', formData, {
         headers: {
           // No establecer Content-Type manualmente, axios lo hace automáticamente para FormData
         },
