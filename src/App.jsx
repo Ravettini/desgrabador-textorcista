@@ -16,7 +16,11 @@ function App() {
   const [error, setError] = useState(null)
   const [audioInfo, setAudioInfo] = useState(null)
 
+  // Debug logs
+  console.log('🔍 App State:', { method, processing, progress, transcript: !!transcript, error, audioInfo })
+
   const handleMethodSelect = (selectedMethod) => {
+    console.log('🎯 Method selected:', selectedMethod)
     setMethod(selectedMethod)
     setTranscript(null)
     setError(null)
@@ -24,6 +28,7 @@ function App() {
   }
 
   const handleReset = () => {
+    console.log('🔄 Resetting app state')
     setMethod(null)
     setTranscript(null)
     setError(null)
@@ -33,6 +38,11 @@ function App() {
   }
 
   const handleTranscriptComplete = (result) => {
+    console.log('✅ Transcript completed:', { 
+      textLength: result.text?.length, 
+      duration: result.duration, 
+      size: result.size 
+    })
     setTranscript(result.text)
     setAudioInfo({
       duration: result.duration,
@@ -43,6 +53,7 @@ function App() {
   }
 
   const handleError = (err) => {
+    console.error('❌ Error occurred:', err)
     setError(err)
     setProcessing(false)
     setProgress({ stage: '', percent: 0 })

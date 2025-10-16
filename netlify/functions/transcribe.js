@@ -91,10 +91,12 @@ exports.handler = async function(event) {
 
   // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
+    console.log('🔄 CORS preflight request')
     return { statusCode: 200, headers, body: '' }
   }
 
   if (event.httpMethod !== 'POST') {
+    console.error('❌ Invalid HTTP method:', event.httpMethod)
     return {
       statusCode: 405,
       headers,
@@ -103,16 +105,18 @@ exports.handler = async function(event) {
   }
 
   try {
-    console.log('=== Iniciando handler de transcripción ===')
-    console.log('HTTP Method:', event.httpMethod)
-    console.log('Content-Type:', event.headers['content-type'] || event.headers['Content-Type'])
+    console.log('=== 🚀 INICIANDO HANDLER DE TRANSCRIPCIÓN ===')
+    console.log('📡 HTTP Method:', event.httpMethod)
+    console.log('📋 Content-Type:', event.headers['content-type'] || event.headers['Content-Type'])
+    console.log('📏 Body length:', event.body?.length || 0)
+    console.log('🔐 Is Base64:', event.isBase64Encoded)
     
     // Inicializar Replicate dentro del handler
     const replicate = new Replicate({
       auth: process.env.REPLICATE_API_TOKEN
     })
     
-    console.log('Replicate inicializado')
+    console.log('🔑 Replicate inicializado:', !!process.env.REPLICATE_API_TOKEN)
 
     const contentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
 
@@ -123,7 +127,7 @@ exports.handler = async function(event) {
 
     // Manejar URLs (temporalmente deshabilitado)
     if (contentType.includes('application/json')) {
-      console.log('Solicitud con JSON (URL) - temporalmente deshabilitada')
+      console.log('🚫 Solicitud con JSON (URL) - temporalmente deshabilitada')
       return {
         statusCode: 400,
         headers,
@@ -135,33 +139,40 @@ exports.handler = async function(event) {
     }
     // Multipart con archivo
     else if (contentType.includes('multipart/form-data')) {
-      console.log('Parseando multipart/form-data...')
+      console.log('📦 Parseando multipart/form-data...')
       const { files } = await parseMultipartForm(event)
       
       if (!files || files.length === 0) {
+        console.error('❌ No files received in multipart form')
         throw new Error('No se recibió ningún archivo')
       }
 
-      console.log('Archivo recibido:', files[0].filename)
+      console.log('📄 Archivo recibido:', { 
+        filename: files[0].filename, 
+        size: files[0].buffer.length,
+        mimeType: files[0].mimeType 
+      })
       const audioFile = files[0]
       audioBuffer = audioFile.buffer
       filename = audioFile.filename
       size = `${(audioBuffer.length / 1024 / 1024).toFixed(2)} MB`
     } else {
+      console.error('❌ Unsupported Content-Type:', contentType)
       throw new Error('Content-Type no soportado. Use multipart/form-data para subir archivos.')
     }
 
     // Validar tamaño (máximo 25MB)
     if (audioBuffer.length > 25 * 1024 * 1024) {
+      console.error('❌ File too large:', audioBuffer.length)
       throw new Error('El archivo es demasiado grande. Máximo 25MB.')
     }
 
-    console.log('Archivo válido, iniciando transcripción...')
+    console.log('✅ Archivo válido, iniciando transcripción...')
 
     // Transcribir
     const text = await transcribeAudio(audioBuffer, filename, replicate)
     
-    console.log('Transcripción completada exitosamente')
+    console.log('🎉 Transcripción completada exitosamente, texto length:', text?.length)
 
     return {
       statusCode: 200,
@@ -174,9 +185,9 @@ exports.handler = async function(event) {
       })
     }
   } catch (error) {
-    console.error('=== ERROR EN HANDLER ===')
-    console.error('Mensaje:', error.message)
-    console.error('Stack:', error.stack)
+    console.error('=== ❌ ERROR EN HANDLER ===')
+    console.error('💥 Mensaje:', error.message)
+    console.error('📚 Stack:', error.stack)
     
     return {
       statusCode: 500,

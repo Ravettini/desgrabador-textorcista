@@ -11,9 +11,15 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
   const ffmpegRef = useRef(null)
   const [ffmpegLoaded, setFfmpegLoaded] = useState(false)
 
+  console.log('📁 Uploader State:', { file: file?.name, dragActive, ffmpegLoaded })
+
   const loadFFmpeg = async () => {
-    if (ffmpegRef.current) return ffmpegRef.current
+    if (ffmpegRef.current) {
+      console.log('🎬 FFmpeg already loaded, reusing instance')
+      return ffmpegRef.current
+    }
     
+    console.log('🎬 Loading FFmpeg...')
     const ffmpeg = new FFmpeg()
     ffmpegRef.current = ffmpeg
     
@@ -24,9 +30,11 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
         coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
         wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
       })
+      console.log('✅ FFmpeg loaded successfully')
       setFfmpegLoaded(true)
       return ffmpeg
     } catch (err) {
+      console.error('❌ FFmpeg load error:', err)
       throw new Error('Error al cargar FFmpeg. Por favor, recargá la página.')
     }
   }
@@ -52,6 +60,12 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
   }
 
   const handleFileSelection = (selectedFile) => {
+    console.log('📄 File selected:', { 
+      name: selectedFile.name, 
+      type: selectedFile.type, 
+      size: selectedFile.size 
+    })
+    
     const validTypes = ['audio/mpeg', 'audio/mp3', 'video/mp4']
     const validExtensions = ['.mp3', '.mp4']
     
@@ -60,16 +74,19 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
     const isValidType = validTypes.includes(selectedFile.type)
     
     if (!isValidExtension && !isValidType) {
+      console.error('❌ Invalid file type:', selectedFile.type)
       onError('El archivo debe ser .mp3 o .mp4')
       return
     }
 
     // Límite de 100MB
     if (selectedFile.size > 100 * 1024 * 1024) {
+      console.error('❌ File too large:', selectedFile.size)
       onError('El archivo no debe superar los 100MB')
       return
     }
 
+    console.log('✅ File validation passed')
     setFile(selectedFile)
   }
 
@@ -113,7 +130,12 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
   }
 
   const handleSubmit = async () => {
-    if (!file) return
+    if (!file) {
+      console.error('❌ No file selected for submission')
+      return
+    }
+
+    console.log('🚀 Starting transcription process for:', file.name)
 
     try {
       setProcessing(true)
@@ -124,9 +146,12 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
 
       // Si es MP4, extraer audio en el cliente
       if (file.name.toLowerCase().endsWith('.mp4')) {
+        console.log('🎬 Extracting audio from MP4...')
         audioBlob = await extractAudioFromMP4(file)
         fileName = file.name.replace('.mp4', '.mp3')
+        console.log('✅ Audio extracted successfully')
       } else {
+        console.log('🎵 Using audio file directly')
         setProgress({ stage: 'Archivo de audio listo...', percent: 50 })
       }
 
@@ -135,6 +160,7 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
       // Crear FormData para enviar
       const formData = new FormData()
       formData.append('audio', audioBlob, fileName)
+      console.log('📤 Sending to API:', { fileName, size: audioBlob.size })
 
       const response = await axios.post('/api/transcribe', formData, {
         headers: {
@@ -151,6 +177,11 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
         }
       })
 
+      console.log('📥 API Response received:', { 
+        success: response.data.success, 
+        textLength: response.data.text?.length 
+      })
+
       setProgress({ stage: 'Procesando transcripción...', percent: 95 })
 
       if (response.data.success) {
@@ -163,7 +194,7 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
         throw new Error(response.data.error || 'Error en la transcripción')
       }
     } catch (err) {
-      console.error('Error:', err)
+      console.error('❌ Transcription error:', err)
       const errorMessage = err.response?.data?.error || 
         err.message || 
         'Error al procesar el archivo. Por favor, intentá nuevamente.'
