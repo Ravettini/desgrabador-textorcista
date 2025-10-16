@@ -164,11 +164,10 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
       }
     } catch (err) {
       console.error('Error:', err)
-      onError(
-        err.response?.data?.error || 
+      const errorMessage = err.response?.data?.error || 
         err.message || 
         'Error al procesar el archivo. Por favor, intentá nuevamente.'
-      )
+      onError(String(errorMessage))
     }
   }
 

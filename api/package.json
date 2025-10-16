@@ -1,11 +1,9 @@
 {
   "name": "textorcista-api",
   "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "replicate": "^0.25.0",
-    "busboy": "^1.6.0",
-    "ytdl-core": "^4.11.5",
-    "node-fetch": "^2.7.0"
+    "busboy": "^1.6.0"
   }
 }
-

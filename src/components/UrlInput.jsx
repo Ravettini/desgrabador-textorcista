@@ -67,11 +67,10 @@ function UrlInput({ setProcessing, setProgress, onComplete, onError, onBack }) {
       }
     } catch (err) {
       console.error('Error:', err)
-      onError(
-        err.response?.data?.error || 
+      const errorMessage = err.response?.data?.error || 
         err.message || 
         'Error al procesar el video. Verificá que el enlace sea público y válido.'
-      )
+      onError(String(errorMessage))
     }
   }
 
