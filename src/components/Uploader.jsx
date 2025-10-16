@@ -162,7 +162,14 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
       formData.append('audio', audioBlob, fileName)
       console.log('📤 Sending to API:', { fileName, size: audioBlob.size })
 
-      const response = await axios.post('/api/transcribe-simple', formData, {
+      // Usar URL de Colab si está configurada, sino usar Netlify
+      const API_URL = import.meta.env.VITE_COLAB_API_URL 
+        ? `${import.meta.env.VITE_COLAB_API_URL}/api/transcribe`
+        : '/api/transcribe-simple'
+      
+      console.log('🔗 Using API URL:', API_URL)
+      
+      const response = await axios.post(API_URL, formData, {
         headers: {
           // No establecer Content-Type manualmente, axios lo hace automáticamente para FormData
         },
