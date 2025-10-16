@@ -1,18 +1,14 @@
 const Busboy = require('busboy')
-let Replicate
-try {
-  Replicate = require('replicate').default || require('replicate')
-} catch (err) {
-  Replicate = require('replicate')
-}
+const Replicate = require('replicate')
 
 let replicate
 try {
   replicate = new Replicate({
-    auth: process.env.REPLICATE_API_TOKEN || undefined
+    auth: process.env.REPLICATE_API_TOKEN
   })
 } catch (err) {
   console.error('Error inicializando Replicate:', err)
+  replicate = null
 }
 
 // Límite de duración para evitar timeout (5 minutos)
