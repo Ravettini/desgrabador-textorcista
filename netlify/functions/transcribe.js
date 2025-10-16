@@ -49,14 +49,32 @@ function parseMultipartForm(event) {
 // Transcribir con Whisper via Replicate
 async function transcribeAudio(audioBuffer, filename, replicateClient) {
   try {
-    console.log(`Transcribiendo archivo: ${filename}, tamaño: ${audioBuffer.length} bytes`)
+    console.log(`🎵 Transcribiendo archivo: ${filename}, tamaño: ${audioBuffer.length} bytes`)
+    
+    // Verificar si hay token de Replicate
+    if (!process.env.REPLICATE_API_TOKEN) {
+      console.log('⚠️ No hay token de Replicate, usando transcripción simulada')
+      // Simular transcripción para testing
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      return `Transcripción simulada del archivo "${filename}".
+
+Este es un texto de prueba generado porque no hay token de Replicate configurado.
+
+Para obtener transcripciones reales:
+1. Ve a https://replicate.com
+2. Crea una cuenta gratuita
+3. Obtén tu token API
+4. Configúralo en las variables de entorno de Netlify
+
+El archivo tiene un tamaño de ${(audioBuffer.length / 1024 / 1024).toFixed(2)} MB.`
+    }
     
     // Convertir buffer a base64 data URI
     const base64Audio = audioBuffer.toString('base64')
     const mimeType = filename.endsWith('.mp3') ? 'audio/mpeg' : 'audio/mp4'
     const dataUri = `data:${mimeType};base64,${base64Audio}`
 
-    console.log('Llamando a Replicate API con modelo Whisper small...')
+    console.log('🤖 Llamando a Replicate API con modelo Whisper small...')
     
     // Usar modelo Whisper en Replicate (modelo "small" como en tu script)
     const output = await replicateClient.run(
@@ -71,12 +89,12 @@ async function transcribeAudio(audioBuffer, filename, replicateClient) {
       }
     )
 
-    console.log('Respuesta de Replicate recibida')
+    console.log('✅ Respuesta de Replicate recibida')
     
     // Replicate devuelve el texto directamente
     return output.transcription || output.text || output
   } catch (error) {
-    console.error('Error en transcribeAudio:', error)
+    console.error('❌ Error en transcribeAudio:', error)
     throw new Error(`Error en la transcripción: ${error.message}`)
   }
 }
@@ -123,10 +141,10 @@ exports.handler = async function(event) {
     
     // Inicializar Replicate dentro del handler
     const replicate = new Replicate({
-      auth: process.env.REPLICATE_API_TOKEN
+      auth: process.env.REPLICATE_API_TOKEN || 'dummy-token'
     })
     
-    console.log('🔑 Replicate inicializado:', !!process.env.REPLICATE_API_TOKEN)
+    console.log('🔑 Replicate inicializado, token presente:', !!process.env.REPLICATE_API_TOKEN)
 
     const contentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
 
