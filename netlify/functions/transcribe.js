@@ -85,13 +85,19 @@ exports.handler = async function(event) {
   // CORS headers
   const headers = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS, GET',
+    'Access-Control-Max-Age': '86400'
   }
+
+  console.log('=== 🚀 FUNCIÓN TRANSCRIBE INICIADA ===')
+  console.log('📡 HTTP Method:', event.httpMethod)
+  console.log('🔗 Path:', event.path)
+  console.log('📋 Headers:', JSON.stringify(event.headers, null, 2))
 
   // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
-    console.log('🔄 CORS preflight request')
+    console.log('🔄 CORS preflight request - OK')
     return { statusCode: 200, headers, body: '' }
   }
 
@@ -100,7 +106,11 @@ exports.handler = async function(event) {
     return {
       statusCode: 405,
       headers,
-      body: JSON.stringify({ error: 'Método no permitido' })
+      body: JSON.stringify({ 
+        error: 'Método no permitido',
+        received: event.httpMethod,
+        expected: 'POST'
+      })
     }
   }
 

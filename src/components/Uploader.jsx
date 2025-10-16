@@ -164,7 +164,7 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
 
       const response = await axios.post('/api/transcribe', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          // No establecer Content-Type manualmente, axios lo hace automáticamente para FormData
         },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
