@@ -165,7 +165,7 @@ function Uploader({ setProcessing, setProgress, onComplete, onError, onBack }) {
       // Usar URL de Colab si está configurada, sino usar Netlify
       const API_URL = import.meta.env.VITE_COLAB_API_URL 
         ? `${import.meta.env.VITE_COLAB_API_URL}/api/transcribe`
-        : '/api/transcribe-simple'
+        : '/api/transcribe-replicate'
       
       console.log('🔗 Using API URL:', API_URL)
       
