@@ -234,7 +234,7 @@ exports.handler = async function(event) {
     }
     
     console.log('Procesando solicitud...')
-    console.log('Content-Type:', event.headers['content-type'] || event.headers['Content-Type']) para pruebas
+    console.log('Content-Type:', event.headers['content-type'] || event.headers['Content-Type'])
 
     const contentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
 
