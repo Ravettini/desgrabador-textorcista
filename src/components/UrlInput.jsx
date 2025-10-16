@@ -83,9 +83,9 @@ function UrlInput({ setProcessing, setProgress, onComplete, onError, onBack }) {
 
       <h2>🔗 Pegar link de video</h2>
       <div className="info-notice">
-        <p><strong>⚠️ Límite de duración</strong></p>
-        <p>Solo videos de hasta <strong>5 minutos</strong> por límites de Netlify.</p>
-        <p>Videos más largos: descargalos manualmente y usalos en "Subir archivo".</p>
+        <p><strong>⚠️ Funcionalidad temporalmente deshabilitada</strong></p>
+        <p>La descarga automática desde URLs está en proceso de debugging.</p>
+        <p><strong>Por favor, usá la opción "Subir archivo"</strong> que funciona perfectamente.</p>
       </div>
       <p className="url-subtitle">
         Ingresá la URL de un video de YouTube o Vimeo (máximo 5 minutos)
