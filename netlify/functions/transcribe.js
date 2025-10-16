@@ -1,16 +1,6 @@
 const Busboy = require('busboy')
 const Replicate = require('replicate')
 
-let replicate
-try {
-  replicate = new Replicate({
-    auth: process.env.REPLICATE_API_TOKEN
-  })
-} catch (err) {
-  console.error('Error inicializando Replicate:', err)
-  replicate = null
-}
-
 // Límite de duración para evitar timeout (5 minutos)
 const MAX_VIDEO_DURATION = 300 // 5 minutos en segundos
 
@@ -175,15 +165,19 @@ async function downloadVimeoAudio(url) {
 }
 
 // Transcribir con Whisper via Replicate
-async function transcribeAudio(audioBuffer, filename) {
+async function transcribeAudio(audioBuffer, filename, replicateClient) {
   try {
+    console.log(`Transcribiendo archivo: ${filename}, tamaño: ${audioBuffer.length} bytes`)
+    
     // Convertir buffer a base64 data URI
     const base64Audio = audioBuffer.toString('base64')
     const mimeType = filename.endsWith('.mp3') ? 'audio/mpeg' : 'audio/mp4'
     const dataUri = `data:${mimeType};base64,${base64Audio}`
 
+    console.log('Llamando a Replicate API con modelo Whisper small...')
+    
     // Usar modelo Whisper en Replicate (modelo "small" como en tu script)
-    const output = await replicate.run(
+    const output = await replicateClient.run(
       "openai/whisper:4d50797290df275329f202e48c76360b3f22b08d28c196cbc54600319435f8d2",
       {
         input: {
@@ -195,9 +189,12 @@ async function transcribeAudio(audioBuffer, filename) {
       }
     )
 
+    console.log('Respuesta de Replicate recibida')
+    
     // Replicate devuelve el texto directamente
     return output.transcription || output.text || output
   } catch (error) {
+    console.error('Error en transcribeAudio:', error)
     throw new Error(`Error en la transcripción: ${error.message}`)
   }
 }
@@ -224,12 +221,14 @@ exports.handler = async function(event) {
   }
 
   try {
-    // Verificar que Replicate esté disponible
-    if (!replicate) {
-      throw new Error('Error de configuración: Replicate no está inicializado correctamente')
-    }
+    console.log('Iniciando handler de transcripción...')
     
-    console.log('Procesando solicitud...')
+    // Inicializar Replicate dentro del handler para evitar problemas con bundler
+    const replicate = new Replicate({
+      auth: process.env.REPLICATE_API_TOKEN
+    })
+    
+    console.log('Replicate inicializado correctamente')
     console.log('Content-Type:', event.headers['content-type'] || event.headers['Content-Type'])
 
     const contentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
@@ -287,7 +286,9 @@ exports.handler = async function(event) {
     }
 
     // Transcribir
-    const text = await transcribeAudio(audioBuffer, filename)
+    console.log('Iniciando transcripción con Whisper...')
+    const text = await transcribeAudio(audioBuffer, filename, replicate)
+    console.log('Transcripción completada exitosamente')
 
     return {
       statusCode: 200,
