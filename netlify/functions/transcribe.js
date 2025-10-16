@@ -1,6 +1,9 @@
 const Busboy = require('busboy')
 const Replicate = require('replicate')
 
+// Cargar ytdl y fetch solo si es necesario (lazy loading)
+let ytdl, fetch
+
 // Límite de duración para evitar timeout (5 minutos)
 const MAX_VIDEO_DURATION = 300 // 5 minutos en segundos
 
@@ -52,6 +55,11 @@ function parseMultipartForm(event) {
 // Descargar audio de YouTube con validación de duración
 async function downloadYouTubeAudio(url) {
   try {
+    // Lazy load ytdl-core
+    if (!ytdl) {
+      ytdl = require('ytdl-core')
+    }
+    
     const info = await ytdl.getInfo(url)
     const videoDuration = parseInt(info.videoDetails.lengthSeconds)
     
@@ -104,6 +112,11 @@ async function downloadYouTubeAudio(url) {
 // Descargar audio de Vimeo con validación
 async function downloadVimeoAudio(url) {
   try {
+    // Lazy load node-fetch
+    if (!fetch) {
+      fetch = require('node-fetch')
+    }
+    
     // Extraer ID de Vimeo
     const vimeoIdMatch = url.match(/vimeo\.com\/(\d+)/)
     if (!vimeoIdMatch) {
