@@ -1,11 +1,19 @@
 const Busboy = require('busboy')
-const Replicate = require('replicate').default || require('replicate')
-const ytdl = require('ytdl-core')
-const fetch = require('node-fetch')
+let Replicate
+try {
+  Replicate = require('replicate').default || require('replicate')
+} catch (err) {
+  Replicate = require('replicate')
+}
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN || '', // Opcional: gratis sin token (rate limited)
-})
+let replicate
+try {
+  replicate = new Replicate({
+    auth: process.env.REPLICATE_API_TOKEN || undefined
+  })
+} catch (err) {
+  console.error('Error inicializando Replicate:', err)
+}
 
 // Límite de duración para evitar timeout (5 minutos)
 const MAX_VIDEO_DURATION = 300 // 5 minutos en segundos
@@ -220,8 +228,13 @@ exports.handler = async function(event) {
   }
 
   try {
-    // Replicate funciona sin token (con rate limits) o con token para más uso
-    // No es obligatorio configurar REPLICATE_API_TOKEN para pruebas
+    // Verificar que Replicate esté disponible
+    if (!replicate) {
+      throw new Error('Error de configuración: Replicate no está inicializado correctamente')
+    }
+    
+    console.log('Procesando solicitud...')
+    console.log('Content-Type:', event.headers['content-type'] || event.headers['Content-Type']) para pruebas
 
     const contentType = event.headers['content-type'] || event.headers['Content-Type'] || ''
 
@@ -291,13 +304,16 @@ exports.handler = async function(event) {
       })
     }
   } catch (error) {
-    console.error('Error:', error)
+    console.error('Error completo:', error)
+    console.error('Error stack:', error.stack)
+    console.error('Error name:', error.name)
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
         success: false,
-        error: error.message || 'Error al procesar la solicitud'
+        error: error.message || 'Error al procesar la solicitud',
+        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
       })
     }
   }
